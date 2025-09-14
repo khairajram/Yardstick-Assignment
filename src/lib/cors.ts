@@ -15,5 +15,5 @@ export function handleOptions(req: Request) {
     const response = NextResponse.json({});
     return addCors(response);
   }
-  return null;
+  return new Response(null, { status: 405 });
 }
