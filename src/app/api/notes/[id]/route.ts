@@ -7,11 +7,20 @@ export async function OPTIONS(req: Request) {
   return handleOptions(req);
 }
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+
+function extractIdFromReq(req: Request) {
+  const url = new URL(req.url);
+  const segments = url.pathname.split("/");
+  return segments[segments.length - 1];
+}
+
+export async function GET(req: NextRequest) {
   try {
     const { tenantId } = getUserFromRequest(req);
 
-    const note = await prisma.note.findUnique({ where: { id: params.id } });
+     const id = extractIdFromReq(req)
+
+    const note = await prisma.note.findUnique({ where: { id } });
 
     if (!note || note.tenantId !== tenantId) {
       return addCors(NextResponse.json({ message: "Note not found" }, { status: 404 }))
@@ -27,12 +36,14 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 
 
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest) {
   try {
     const { userId, tenantId } = getUserFromRequest(req);
     const { title, content } = await req.json();
 
-    const note = await prisma.note.findUnique({ where: { id: params.id } });
+     const id = extractIdFromReq(req)
+
+    const note = await prisma.note.findUnique({ where: { id } });
 
     if (!note || note.tenantId !== tenantId) {
       return addCors( NextResponse.json({ message: "Note not found" }, { status: 404 }))
@@ -43,7 +54,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     }
 
     const updatedNote = await prisma.note.update({
-      where: { id: params.id },
+      where: { id },
       data: { title, content }
     });
 
@@ -56,11 +67,13 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 }
 
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest) {
   try {
     const { userId, tenantId, role } = getUserFromRequest(req);
 
-    const note = await prisma.note.findUnique({ where: { id: params.id } });
+     const id = extractIdFromReq(req)
+
+    const note = await prisma.note.findUnique({ where: { id } });
 
     if (!note || note.tenantId !== tenantId) {
       return addCors( NextResponse.json({ message: "Note not found" }, { status: 404 }))
@@ -70,7 +83,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
       return addCors( NextResponse.json({ message: "Forbidden: Cannot delete others' notes" }, { status: 403 }))
     }
 
-    await prisma.note.delete({ where: { id: params.id } });
+    await prisma.note.delete({ where: { id } });
 
     return addCors( NextResponse.json({ message: "Note deleted" }))
 
