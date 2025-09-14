@@ -142,7 +142,7 @@ function NoteCard({
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [isEditDialogOpen,isDeleteDialogOpen]);
 
   async function handleSave() {
     setLoading(true);
