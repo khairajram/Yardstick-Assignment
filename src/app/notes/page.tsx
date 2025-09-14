@@ -267,7 +267,7 @@ function NoteCard({
 }
 
 
-export function AddNote({ setNotes }: { setNotes: React.Dispatch<React.SetStateAction<Note[]>> }) {
+function AddNote({ setNotes }: { setNotes: React.Dispatch<React.SetStateAction<Note[]>> }) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
