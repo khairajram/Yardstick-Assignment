@@ -9,6 +9,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface Note {
   id: string;
@@ -92,6 +94,13 @@ export default function NotesPage() {
           <button className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
             Upgrade
           </button>
+        )}
+        {role === "ADMIN" &&  (
+          <Link href={'/addMember'}>
+          <button className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
+            add Member
+          </button>
+          </Link>
         )}
       </div>}
 
@@ -354,5 +363,10 @@ function AddNote({ setNotes }: { setNotes: React.Dispatch<React.SetStateAction<N
     </Dialog>
   );
 }
+
+
+
+
+
 
 

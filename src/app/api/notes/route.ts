@@ -72,8 +72,10 @@ export async function GET(req: Request) {
     });
     
 
+    const subscription = notes[0]?.tenant?.subscription || ""
 
-    return addCors( NextResponse.json({notes,role,subscription: notes[0].tenant.subscription}) )
+
+    return addCors( NextResponse.json({notes,role,subscription }) )
 
   } catch (err: any) {
     console.error(err);
