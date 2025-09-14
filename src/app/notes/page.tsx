@@ -116,6 +116,7 @@ export default function NotesPage() {
             note={note}
             onUpdate={handleUpdate}
             onDelete={handleDelete}
+            role={role}
           />
         ))}
       </div>
@@ -127,10 +128,12 @@ export default function NotesPage() {
 
 function NoteCard({
   note,
+  role,
   onUpdate,
   onDelete,
 }: {
   note: Note;
+  role : string;
   onUpdate: (note: Note) => void;
   onDelete: (id: string) => void;
 }) {
@@ -178,7 +181,9 @@ function NoteCard({
   return (
     <div className="relative border rounded-lg shadow-md p-4 bg-white hover:shadow-lg transition">
        
-      <div className="flex justify-between items-start">
+
+    {role === "MEMBER" && (
+        <div className="flex justify-between items-start">
         <h2 className="font-semibold text-2xl">{note.title}</h2>
         <div
           onClick={() => setThreeDot((prev) => !prev)}
@@ -268,6 +273,9 @@ function NoteCard({
           </div>
         )}
       </div>
+    )}
+
+      
 
 
       <p className="text-gray-600 mt-2">{note.content}</p>
